@@ -1,0 +1,27 @@
+# Veri seti klasörü
+veriseti/
+
+# Görüntü dosyaları
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.tif
+*.tiff
+
+# MATLAB veri/model dosyaları
+*.mat
+
+# MATLAB otomatik oluşturduğu dosyalar
+*.asv
+*.m~
+slprj/
+
+# Kişisel/hassas dosyalar
+kisiselbilgiler.txt
+
+# Sistem dosyaları
+.DS_Store
+Thumbs.db
+
+bildiri/

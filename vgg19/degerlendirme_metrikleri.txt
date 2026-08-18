@@ -1,0 +1,4 @@
+Doğruluk Oranı  : 99.71%
+Macro Precision : 99.72
+Macro Recall    : 99.71
+Macro F1-score  : 99.71

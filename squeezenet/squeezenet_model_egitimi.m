@@ -1,0 +1,85 @@
+clear all;
+
+egitim_yolu = 'C:\Users\Muhammet\Desktop\kayac_siniflandirma\veriseti\train'; 
+test_yolu = 'C:\Users\Muhammet\Desktop\kayac_siniflandirma\veriseti\test';
+
+egitim_veriseti = imageDatastore(egitim_yolu, ...
+    'IncludeSubfolders', true, ...
+    'LabelSource', 'foldernames');
+
+test_veriseti = imageDatastore(test_yolu, ...
+    'IncludeSubfolders', true, ...
+    'LabelSource', 'foldernames');
+
+etiketler = egitim_veriseti.Labels;
+kategori_sayisi = numel(categories(etiketler));
+
+net = squeezenet;
+lgraph = layerGraph(net);
+
+inputSize = [227 227 3];
+
+new_conv10 = convolution2dLayer([1, 1], kategori_sayisi, ...
+    'Name', 'new_conv10', ...
+    'WeightLearnRateFactor', 10, ...
+    'BiasLearnRateFactor', 10);
+
+lgraph = replaceLayer(lgraph, 'conv10', new_conv10);
+
+new_output = classificationLayer('Name', 'new_output');
+lgraph = replaceLayer(lgraph, 'ClassificationLayer_predictions', new_output);
+
+egitim_veriseti_aug = augmentedImageDatastore(inputSize, egitim_veriseti);
+test_veriseti_aug = augmentedImageDatastore(inputSize, test_veriseti);
+
+options = trainingOptions("sgdm", ...
+    'InitialLearnRate', 0.0001, ...
+    'MaxEpochs', 10, ...
+    'MiniBatchSize', 32, ...
+    'LearnRateSchedule', 'piecewise', ...
+    'LearnRateDropFactor', 0.1, ...
+    'LearnRateDropPeriod', 8, ...
+    'Verbose', true, ...
+    'Plots', 'training-progress');
+
+[kayac_siniflandirma_squeezenet_model, info] = trainNetwork(egitim_veriseti_aug, lgraph, options);
+
+tahmin = classify(kayac_siniflandirma_squeezenet_model, test_veriseti_aug);
+dogruluk_orani = sum(tahmin == test_veriseti.Labels) / numel(test_veriseti.Labels) * 100;
+disp(['Accuracy (Doğruluk Orani): %', num2str(dogruluk_orani)]);
+
+figure;
+confusionchart(test_veriseti.Labels, tahmin);
+title('Confusion Matrix - SqueezeNet');
+
+cm = confusionmat(test_veriseti.Labels, tahmin);
+
+numClasses = kategori_sayisi;
+precision = zeros(numClasses,1);
+recall    = zeros(numClasses,1);
+f1score   = zeros(numClasses,1);
+
+for i = 1:numClasses
+    TP = cm(i,i);
+    FP = sum(cm(:,i)) - TP;
+    FN = sum(cm(i,:)) - TP;
+    precision(i) = TP / (TP + FP + eps);
+    recall(i)    = TP / (TP + FN + eps);
+    f1score(i)   = 2 * (precision(i)*recall(i)) / (precision(i)+recall(i)+eps);
+end
+
+macro_precision = mean(precision);
+macro_recall    = mean(recall);
+macro_f1        = mean(f1score);
+
+disp('Değerlendirme Metrikleri');
+disp(table(categories(etiketler), precision, recall, f1score, ...
+    'VariableNames', {'Sınıf','Precision','Recall','F1Score'}));
+
+fprintf('Doğruluk Oranı  : %.2f%%\n', dogruluk_orani);
+fprintf('Macro Precision : %.2f\n', macro_precision*100);
+fprintf('Macro Recall    : %.2f\n', macro_recall*100);
+fprintf('Macro F1-score  : %.2f\n', macro_f1*100);
+
+save('C:\Users\Muhammet\Desktop\kayac_siniflandirma\squeezenet\kayac_siniflandirma_squeezenet_egitim.mat', ...
+    'kayac_siniflandirma_squeezenet_model');
