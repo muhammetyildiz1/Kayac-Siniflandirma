@@ -30,7 +30,7 @@ googlenet/
 darknet19/
 ```
 
-Veri seti boyutu büyük olduğu için repoya dahil edilmemiştir.
+Veri seti boyutu büyük olduğu için repoya dahil edilmemiştir: [Drill Core Image Dataset](https://huggingface.co/datasets/168sir/drill-core-image-dataset)
 
 ## Çalıştırma
 
