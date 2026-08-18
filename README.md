@@ -1,50 +1,43 @@
-# Kayaç Sınıflandırma - Derin Öğrenme ile
+# Kayaç Sınıflandırma
 
-Bu proje, kayaç görüntülerini derin öğrenme yöntemleri kullanarak sınıflandırmayı amaçlamaktadır. Çalışmada hem literatürde yaygın kullanılan klasik CNN mimarileri hem de bu proje kapsamında geliştirilen özgün bir model (**MYNet**) karşılaştırmalı olarak değerlendirilmiştir.
+Kayaç görüntülerinin derin öğrenme ile sınıflandırılmasına yönelik bir çalışma. 35 farklı kayaç sınıfı içeren bir veri seti üzerinde, literatürde bilinen CNN mimarileri ile birlikte MYNet adlı özgün bir model eğitilip karşılaştırılmıştır.
 
-## 📌 Proje Özeti
+## Kullanılan modeller
 
-- **Veri Seti:** 35 farklı kayaç sınıfını içeren geniş bir görüntü veri seti
-- **Kullanılan Modeller:**
-  - MYNet (bu çalışmada geliştirilen özgün model)
-  - AlexNet
-  - VGG16
-  - VGG19
-  - SqueezeNet
-  - ResNet50
-  - GoogleNet
-  - DarkNet19
-- **Ortam:** MATLAB (Deep Learning Toolbox)
-- **Değerlendirme Metrikleri:** Precision, Recall, F1-Score (her sınıf için ayrı ayrı ve genel olarak)
+- MYNet (bu çalışma için geliştirilen model)
+- AlexNet
+- VGG16
+- VGG19
+- SqueezeNet
+- ResNet50
+- GoogleNet
+- DarkNet19
 
-## 📁 Klasör Yapısı
+Ortam olarak MATLAB kullanılmıştır.
+
+## Klasör yapısı
+
+Her model kendi klasöründe, eğitim kodu ve değerlendirme sonuçlarıyla birlikte yer alıyor:
 
 ```
-kayac-siniflandirma/
-├── mynet/            # Özgün model kodları
-├── alexnet/
-├── vgg16/
-├── vgg19/
-├── squeezenet/
-├── resnet50/
-├── googlenet/
-├── darknet19/
-├── veriseti/         # Veri seti (varsa, boyut büyükse .gitignore'a ekleyin)
-├── bildiri/          # Çalışmaya ait bildiri/rapor dosyaları
-└── README.md
+mynet/
+alexnet/
+vgg16/
+vgg19/
+squeezenet/
+resnet50/
+googlenet/
+darknet19/
 ```
 
-## 🚀 Nasıl Çalıştırılır
+Veri seti boyutu büyük olduğu için repoya dahil edilmemiştir.
 
-1. MATLAB R2023b (veya üzeri) ve **Deep Learning Toolbox** kurulu olmalıdır.
-2. Kullanmak istediğiniz modelin klasörüne girin (örn. `mynet/`).
-3. İlgili `.m` dosyasını MATLAB'de açıp çalıştırın.
-4. Eğitim tamamlandığında Command Window'da her sınıf için **Precision / Recall / F1-Score** metrikleri otomatik olarak raporlanır.
+## Çalıştırma
 
-## 📊 Sonuçlar
+1. MATLAB'de Deep Learning Toolbox kurulu olmalı.
+2. İlgili model klasörüne girip `.m` dosyasını çalıştırmak yeterli.
+3. Eğitim bittikten sonra Command Window'da her sınıf için precision, recall ve F1-score değerleri yazdırılıyor.
 
-Modellerin performans karşılaştırması ve detaylı metrikler `bildiri/` klasöründeki rapor dosyasında yer almaktadır.
+## Sonuçlar
 
-## 👤 Geliştirici
-
-Muhammet
+Model bazlı değerlendirme metrikleri her klasördeki `degerlendirme_metrikleri.txt` dosyasında yer alıyor.
